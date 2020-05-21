@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import AppHeader from './AppHeader';
+import { MicroFrontend } from './MicroFrontend';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const App = () => {
+  const ordersHost = process.env.REACT_APP_ORDERS_HOST;
+  const appointmentsHost = process.env.REACT_APP_APPOINTMENTS_HOST;
+
+  const Orders = ({ history }) => (
+    <MicroFrontend history={history} host={ordersHost} name="Orders" />
   );
-}
+
+  const Appointments = ({ history }) => (
+    <MicroFrontend history={history} host={appointmentsHost} name="Appointments" />
+  );
+
+  const Home = () => {
+    return (
+      <div>
+        <span>
+          Welcome to Micro Front-End App Demo
+        </span>
+      </div>
+    );
+  };
+
+  return (
+    <BrowserRouter>
+      <React.Fragment>
+        <AppHeader />
+        <Switch>
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/orders" component={Orders} />
+          <Route exact path="/appointments" component={Appointments} />
+          <Route exact path="/" component={Home} />
+        </Switch>
+      </React.Fragment>
+    </BrowserRouter>
+  );
+};
 
 export default App;
